@@ -26,6 +26,7 @@ model User {
   channel       channel[]
   subcription   subscription[]
   likes         likes[]
+    watchHistory watchHistory[]
 
   @@unique([email])
   @@map("user")
@@ -111,6 +112,8 @@ model upload{
   Views Int
   deleted Boolean
 
+    watchHistory watchHistory[]
+
   channel channel @relation(references: [id],fields: [channelId])
   likes likes[]
 }
@@ -128,6 +131,15 @@ model subscription{
 model likes{
   id String @id @default(uuid())
 
+  uploadId String
+  userId String
+
+  upload upload @relation(references: [id],fields: [uploadId])
+  user User @relation(references: [id],fields: [userId])
+}
+
+model watchHistory{
+  id String @id @default(uuid())
   uploadId String
   userId String
 
