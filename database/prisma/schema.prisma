@@ -25,6 +25,7 @@ model User {
   accounts      Account[]
   channel       channel[]
   subcription   subscription[]
+  likes         likes[]
 
   @@unique([email])
   @@map("user")
@@ -111,6 +112,7 @@ model upload{
   deleted Boolean
 
   channel channel @relation(references: [id],fields: [channelId])
+  likes likes[]
 }
 
 model subscription{
@@ -125,8 +127,12 @@ model subscription{
 
 model likes{
   id String @id @default(uuid())
+
   uploadId String
   userId String
+
+  upload upload @relation(references: [id],fields: [uploadId])
+  user User @relation(references: [id],fields: [userId])
 }
 
 
