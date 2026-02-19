@@ -24,6 +24,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   channel       channel[]
+  subcription   subscription[]
 
   @@unique([email])
   @@map("user")
@@ -88,6 +89,7 @@ model channel{
 
   user User @relation(references: [id],fields: [userId])
   upload upload[]
+  subcription subscription[]
 }
 
 enum Type{
@@ -111,5 +113,20 @@ model upload{
   channel channel @relation(references: [id],fields: [channelId])
 }
 
+model subscription{
+  id String @id @default(uuid())
+
+  channelId String
+  userId String
+
+  chanel channel @relation(references: [id],fields: [channelId])
+  user User @relation(references: [id],fields: [userId])
+}
+
+model likes{
+  id String @id @default(uuid())
+  uploadId String
+  userId String
+}
 
 
