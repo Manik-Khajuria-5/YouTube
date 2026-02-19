@@ -23,6 +23,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  channel       channel[]
 
   @@unique([email])
   @@map("user")
@@ -75,4 +76,40 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model channel{
+  id String @id @default(uuid())
+  channelname String
+  banner String 
+  description String
+  profilepic String
+  subscriptionCnt Int
+  userId String
+
+  user User @relation(references: [id],fields: [userId])
+  upload upload[]
+}
+
+enum Type{
+  UNLISTED
+  PRIVATE
+  PUBLIC
+}
+
+model upload{
+  id String @id @default(uuid())
+  channelId String
+  videoUrl String
+  ThumbnailUrl String
+  description String
+  title String
+  type Type
+  likeCnt Int
+  Views Int
+  deleted Boolean
+
+  channel channel @relation(references: [id],fields: [channelId])
+}
+
+
 
