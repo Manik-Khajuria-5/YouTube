@@ -7,22 +7,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request : NextRequest){
    
-    const session = await auth.api.getSession({
-        headers : request.headers
-    });
-
-    const userId = session?.session.userId;
     const body = await request.json();
-
-    if(!userId){
-        return NextResponse.json({
-            success : false,
-            message : "Session not found",
-            err : "err"
-        },{
-            status : 401
-        });
-    }
+    const userId = request.headers.get("x-user-id")!;
+    
 
     const {success,data,error} = ChannelChecker.safeParse(body);
 
@@ -74,22 +61,8 @@ export async function POST(request : NextRequest){
 export async function GET(request : NextRequest){
    
    
-    const session = await auth.api.getSession({
-        headers : request.headers
-    });
-
-    const userId = session?.session.userId;
     const channelname = request.nextUrl.searchParams.get("channelname");
 
-    if(!userId){
-        return NextResponse.json({
-            success : false,
-            message : "Session not found",
-            err : "err"
-        },{
-            status : 401
-        });
-    }
 
     if(!channelname || typeof channelname !== "string"){
         

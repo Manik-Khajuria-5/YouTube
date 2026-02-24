@@ -23,7 +23,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-  channel       channel[]
+  channel       channel?
   subcription   subscription[]
   likes         likes[]
   watchHistory watchHistory[]
@@ -88,7 +88,7 @@ model channel{
   description String
   profilepic String
   subscriptionCnt Int
-  userId String
+  userId String @unique
 
   user User @relation(references: [id],fields: [userId])
   upload upload[]
