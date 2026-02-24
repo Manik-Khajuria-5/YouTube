@@ -89,6 +89,7 @@ model channel{
   profilepic String
   subscriptionCnt Int
   userId String @unique
+  deleted Boolean @default(false)
 
   user User @relation(references: [id],fields: [userId])
   upload upload[]
