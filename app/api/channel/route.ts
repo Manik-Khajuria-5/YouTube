@@ -9,7 +9,6 @@ export async function POST(request : NextRequest){
    
     const body = await request.json();
     const userId = request.headers.get("x-user-id")!;
-    
 
     const {success,data,error} = ChannelChecker.safeParse(body);
 
@@ -33,7 +32,8 @@ export async function POST(request : NextRequest){
                 description : data.description,
                 profilepic : data.profilepic,
                 subscriptionCnt : data.subscriptionCnt,
-                userId : userId
+                userId : userId,
+                deleted : false
             }
          });
 
@@ -60,10 +60,7 @@ export async function POST(request : NextRequest){
 
 export async function GET(request : NextRequest){
    
-   
     const channelname = request.nextUrl.searchParams.get("channelname");
-
-
     if(!channelname || typeof channelname !== "string"){
         
         return NextResponse.json({
@@ -79,7 +76,8 @@ export async function GET(request : NextRequest){
         
          const response = await prisma.channel.findMany({
             where : {
-                channelname : channelname
+                channelname : channelname,
+                deleted : false
             },
             select : {
                 channelname : true,
@@ -89,6 +87,17 @@ export async function GET(request : NextRequest){
                 subscriptionCnt : true
             }
          });
+
+         if(!response){
+
+            return NextResponse.json({
+                success : false,
+                message : "channel not found",
+                err : "err"
+            },{
+                status : 404
+            })
+         }
 
          return NextResponse.json({
             success : true,

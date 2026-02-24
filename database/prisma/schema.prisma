@@ -112,8 +112,8 @@ model upload{
   type Type
   likeCnt Int
   Views Int
-  deleted Boolean
-  uploadAt DateTime
+  deleted Boolean  @default(false)
+  uploadAt DateTime? @default(now())
 
   watchHistory watchHistory[]
   comments comments[]

@@ -9,10 +9,6 @@ export const auth = betterAuth({
     }),
     baseURL: process.env.BETTER_AUTH_URL,
     trustedOrigins: ["http://localhost:3000", "http://127.0.0.1:3000"],
-    // Allow API clients (e.g. Postman) without Origin header in development
-    ...(process.env.NODE_ENV === "development" && {
-        advanced: { disableOriginCheck: true },
-    }),
     emailAndPassword: {
         enabled: true,
     },

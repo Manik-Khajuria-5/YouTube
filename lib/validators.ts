@@ -8,8 +8,15 @@ const ChannelChecker = z.object({
   subscriptionCnt :  z.number(),
 })
 
-const ChannelGetChecker = z.object({
-  channelname : z.string()
+const UploadChecker = z.object({
+  videoUrl :  z.string(),
+  ThumbnailUrl :  z.string(),
+  description : z.string(),
+  title : z.string(),
+  type : z.enum(["UNLISTED","PRIVATE","PUBLIC"]),
+  likeCnt : z.number(),
+  Views : z.number(),
+  deleted : z.boolean()
 })
 
-export {ChannelChecker,ChannelGetChecker}
+export {ChannelChecker,UploadChecker}
