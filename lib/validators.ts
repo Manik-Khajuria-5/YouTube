@@ -8,4 +8,8 @@ const ChannelChecker = z.object({
   subscriptionCnt :  z.number(),
 })
 
-export {ChannelChecker}
+const ChannelGetChecker = z.object({
+  channelname : z.string()
+})
+
+export {ChannelChecker,ChannelGetChecker}
