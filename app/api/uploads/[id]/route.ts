@@ -22,7 +22,8 @@ export async function GET(request : NextRequest,{params} : {params : Promise<{id
 
         const response = await prisma.upload.findFirst({
             where : {
-                id : id
+                id : id,
+                deleted : false
             }
         });
 
@@ -41,6 +42,63 @@ export async function GET(request : NextRequest,{params} : {params : Promise<{id
             success : true,
             message : "Here is required Content",
             uploadId : response
+        },{
+            status : 200
+        })
+    }
+    catch(err){
+
+        return NextResponse.json({
+            
+            success : false,
+            message : "Internal Server Error",
+            err : "err"
+        },{
+            status : 500 
+        });
+    }
+}
+
+export async function PATCH(request : NextRequest,{params} : {params : Promise<{id : string}>}){
+
+    const {id} = await params;
+    
+    if(!id || typeof id !== "string"){
+        return NextResponse.json({
+              success : false,
+              message : "Invalid Id",
+              err : "err"
+        },{
+            status : 401
+        })
+    }
+
+    try{
+
+        const response = await prisma.upload.update({
+            where : {
+                id : id
+            },
+            data : {
+                deleted: true
+            }
+        });
+
+        if(!response){
+
+            return NextResponse.json({
+                 success : false,
+                 message : "Uploaded Content not found",
+                 err : "err"
+            },{
+                status : 404
+            })
+        }
+
+        return NextResponse.json({
+            success : true,
+            message : "Content deleted successfully",
+            uploadId : response.id
         },{
             status : 200
         })

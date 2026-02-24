@@ -9,16 +9,13 @@ export async function POST(request : NextRequest){
     const body = await request.json();
 
     const {success,data,error} = UploadChecker.safeParse(body);
-
-    console.log(body);
-    
     
 
     if(!success){
         return NextResponse.json({
               success : false,
               message : "Invalid Schema",
-              err : error
+              err : "err"
         },{
             status : 401
         })
@@ -28,7 +25,8 @@ export async function POST(request : NextRequest){
         
         const channel = await prisma.channel.findFirst({
             where : {
-                userId : userId
+                userId : userId,
+                deleted : false
             }
         })
 
