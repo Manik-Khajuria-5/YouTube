@@ -5,7 +5,7 @@ import { success } from "zod";
 
 export async function POST(request : NextRequest){
 
-    const userId = request.headers.get("x-user-id")!;
+    const userId= request.headers.get("x-user-id")!;
     const body = await request.json();
 
     const {success,data,error} = UploadChecker.safeParse(body);
@@ -42,8 +42,8 @@ export async function POST(request : NextRequest){
         }
 
         const response = await prisma.upload.create({
-             data : {
-                channelId : channel.id,
+            data : {
+               channelId : channel.id,
                 videoUrl : data.videoUrl,
                 ThumbnailUrl : data.ThumbnailUrl,
                 description : data.description,
@@ -51,9 +51,10 @@ export async function POST(request : NextRequest){
                 type : data.type,
                 likeCnt : data.likeCnt,
                 Views : data.Views,
+                userId : userId,
                 deleted : false,
-             }
-        });
+            }
+        })
 
         return NextResponse.json({
             success : true,

@@ -28,6 +28,7 @@ model User {
   likes         likes[]
   watchHistory watchHistory[]
   comments   comments[]
+    upload    upload[]
 
   @@unique([email])
   @@map("user")
@@ -112,6 +113,7 @@ model upload{
   type Type
   likeCnt Int
   Views Int
+  userId String 
   deleted Boolean  @default(false)
   uploadAt DateTime? @default(now())
 
@@ -119,6 +121,7 @@ model upload{
   comments comments[]
 
   channel channel @relation(references: [id],fields: [channelId])
+  user User @relation(references: [id],fields: [userId])
   likes likes[]
 }
 
