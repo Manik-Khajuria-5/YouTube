@@ -8,7 +8,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request : NextRequest){
    
     const body = await request.json();
-    const userId = request.headers.get("x-user-id")!;
+    const session = await auth.api.getSession({
+        headers : request.headers
+    });
+    const userId = session!.session.userId!;
 
     const {success,data,error} = ChannelChecker.safeParse(body);
 
@@ -58,64 +61,84 @@ export async function POST(request : NextRequest){
     }
 }
 
-export async function GET(request : NextRequest){
+export async function PATCH(request : NextRequest){
    
-    const channelname = request.nextUrl.searchParams.get("channelname");
-    if(!channelname || typeof channelname !== "string"){
-        
-        return NextResponse.json({
-            success : false,
-            message : "No Channel Name provided",
-            err : "err"
-        },{
-            status : 422
-        })
-    }
+       const session = await auth.api.getSession({
+        headers : request.headers
+    });
+    const userId = session!.session.userId!;
 
     try{
-        
-         const response = await prisma.channel.findMany({
+       
+        const response = await prisma.channel.update({
             where : {
-                channelname : channelname,
-                deleted : false
+                userId : userId
             },
-            select : {
-                channelname : true,
-                banner : true,
-                description : true,
-                profilepic : true,
-                subscriptionCnt : true
-            }
-         });
+            data : {deleted : true}
+        })
 
-         if(!response){
-
-            return NextResponse.json({
-                success : false,
-                message : "channel not found",
-                err : "err"
-            },{
-                status : 404
-            })
-         }
-
-         return NextResponse.json({
+        return NextResponse.json({
             success : true,
-            message : "Here are required channels",
-            Channels : response
-         },{
+            message : "User channel deleted successfully",
+            Channels : response.id
+        },{
             status : 200
-         })
+        })
     }
     catch(err){
+
         return NextResponse.json({
-            success : false,
-            message : "Internal Server Error",
-            err : "err"
+           message : "Internal Server Error",
+           err : "err"
         },{
             status : 500
         })
     }
-    
-}
+};
+
+export async function GET(request : NextRequest){
+   
+       const session = await auth.api.getSession({
+        headers : request.headers
+    });
+    const userId = session!.session.userId!;
+
+    try{
+       
+        const response = await prisma.channel.findUnique({
+            where : {
+                userId : userId,
+                deleted : false
+            }
+        })
+
+        if(!response){
+                    return NextResponse.json({
+            success : false,
+            message : "No channel found",
+            err : "err"
+        },{
+            status : 404
+        })
+        }
+
+        return NextResponse.json({
+            success : true,
+            message : "Here are the user channel",
+            Channels : response
+        },{
+            status : 200
+        })
+    }
+    catch(err){
+
+        return NextResponse.json({
+           message : "Internal Server Error",
+           err : "err"
+        },{
+            status : 500
+        })
+    }
+};
+
 
