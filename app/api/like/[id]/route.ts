@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-//post endpoint for likin g a upload
+//post endpoint for liking a upload
 export async function POST(
   request: NextRequest,
   {
@@ -28,8 +28,50 @@ export async function POST(
     return NextResponse.json(
       {
         success: true,
-        message: "Subscribed successfully",
+        message: "liked successfully",
         SubscriptionId: response.id,
+      },
+      {
+        status: 201,
+      },
+    );
+  } catch (err) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
+        error: "err",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}
+
+//get all like for the channel
+export async function GET(
+  request: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  },
+) {
+  const { id } = await params;
+
+  try {
+    const response = await prisma.likes.count({
+      where: {
+        uploadId : id,
+      },
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "like Cnt are here as follows",
+        SubscribeCnt: response,
       },
       {
         status: 201,
