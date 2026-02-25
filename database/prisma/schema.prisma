@@ -133,6 +133,8 @@ model subscription{
 
   chanel channel @relation(references: [id],fields: [channelId])
   user User @relation(references: [id],fields: [userId])
+
+  @@unique([channelId,userId])
 }
 
 model likes{

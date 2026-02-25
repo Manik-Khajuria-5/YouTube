@@ -78,3 +78,45 @@ export async function GET(request : NextRequest,{params} : {
       
 }
 
+//endpoint for delete subscription for a channel
+export async function DELETE(request : NextRequest,{params} : {
+    params : Promise<{id : string}>
+}){
+
+      const {id} = await params;
+
+      const session = await auth.api.getSession({
+        headers : request.headers
+      });
+
+      const userId = session!.session.userId;
+      
+      try{
+         
+         const response = await prisma.subscription.deleteMany({
+             where : {
+                channelId : id,
+                userId : userId
+             }
+         });
+
+         return NextResponse.json({
+             success : true,
+             message : "Subscribed successfully",
+             SubscribeCnt : response 
+         },{
+            status : 201
+         })
+      }
+      catch(err){
+         return NextResponse.json({
+            success : false,
+            message : "Internal Server Error",
+            error : "err"
+         },{
+            status : 500
+         })
+      }
+      
+}
+
