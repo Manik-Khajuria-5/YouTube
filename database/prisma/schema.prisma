@@ -145,6 +145,8 @@ model likes{
 
   upload upload @relation(references: [id],fields: [uploadId])
   user User @relation(references: [id],fields: [userId])
+
+  @@unique([uploadId,userId])
 }
 
 model watchHistory{
