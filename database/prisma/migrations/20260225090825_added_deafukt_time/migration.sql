@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "watchHistory" ALTER COLUMN "watchedAt" SET DEFAULT CURRENT_TIMESTAMP;
