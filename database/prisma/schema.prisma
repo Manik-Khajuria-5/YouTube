@@ -167,8 +167,9 @@ model comments{
   
   userId String
   uploadId String
+  comment String
 
-  CreatedAt DateTime
+  CreatedAt DateTime? @default(now())
 
   user User @relation(references: [id],fields: [userId])
   upload upload @relation(references: [id],fields: [uploadId]) 

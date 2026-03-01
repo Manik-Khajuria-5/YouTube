@@ -19,9 +19,14 @@ const UploadChecker = z.object({
   deleted : z.boolean()
 })
 
+const CommentChecker = z.object({
+   uploadId : z.string(),
+   comment : z.string()
+});
+
 const watchChecker = z.object({
   uploadId : z.string(),
 });
 
 
-export {ChannelChecker,UploadChecker,watchChecker};
+export {ChannelChecker,UploadChecker,watchChecker,CommentChecker};
