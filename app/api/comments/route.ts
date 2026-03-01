@@ -52,3 +52,48 @@ export async function POST(request : NextRequest){
         });
     }
 }
+
+export async function GET(request : NextRequest,{params}:{
+    params : Promise<{id : String}>
+}){
+
+
+    const data = await params;
+    console.log(data);
+    
+    
+    // if(!id || typeof id !== "string"){
+       
+    //     return NextResponse.json({
+    //        message : "Invalid Schema",
+    //        err : "err"
+    //     },{
+    //         status : 403
+    //     })
+    // }
+    
+    // try{
+       
+       const response = await prisma.comments.findMany({
+         where : {
+            uploadId : "mnedk",
+         }
+       })
+
+       return NextResponse.json({
+          message : "Here are required Comments",
+          comments : response
+       },{
+        status : 201
+       })
+    // }
+    // catch(err){
+    //     return NextResponse.json({
+    //        message : "Internal Server Error",
+    //        err : "err"
+    //     },{
+    //         status : 500
+    //     });
+    // }
+}
+
