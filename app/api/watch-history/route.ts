@@ -40,8 +40,9 @@ export async function POST(request : NextRequest) {
         return NextResponse.json({
             message : "Watch History Uploaded successfully",
             WatchHistoryId : response.id
-        })
-    
+        },{
+            status : 201
+        });    
 
     }
     catch(err){
@@ -53,4 +54,39 @@ export async function POST(request : NextRequest) {
         });
     }
     
+}
+
+export async function GET(request : NextResponse){
+   
+    const session = await auth.api.getSession({
+        headers : request.headers
+    });
+
+    const userId = session!.session.userId;
+
+    try{
+        
+       const response = await prisma.upload.findMany({
+         where : {
+            userId : userId
+         }
+       });
+
+       return NextResponse.json({
+          
+        message : "Here is the upload history for user",
+        uploads : response
+       },{
+        status : 200
+       });
+
+    }
+    catch(err){
+        return NextResponse.json({
+            message : "Internal Server Error",
+            err : "err"
+        },{
+            status : 500
+        });
+    }
 }
