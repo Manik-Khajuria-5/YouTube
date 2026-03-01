@@ -154,7 +154,7 @@ model watchHistory{
 
   uploadId String
   userId String
-  watchedAt DateTime @default(now())
+  watchedAt DateTime? @default(now())
 
   upload upload @relation(references: [id],fields: [uploadId])
   user User @relation(references: [id],fields: [userId])
