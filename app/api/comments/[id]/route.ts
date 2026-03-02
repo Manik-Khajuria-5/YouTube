@@ -61,7 +61,7 @@ export async function DELETE(request : NextResponse,{params}:{
        
         return NextResponse.json({
            message : "Invalid Schema",
-           err : "err"
+           err : "error"
         },{
             status : 403
         })
